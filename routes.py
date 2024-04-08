@@ -13,6 +13,7 @@ from fastapi import FastAPI, Body, Path, Query, HTTPException, status
 from models import Student, ResponseModel
 from config import students_collection
 from bson.objectid import ObjectId   #In pymongo 2.2 the call to import objectid is changed
+from typing import Optional
 
 app = FastAPI()
 
@@ -27,8 +28,8 @@ async def create_student(student: Student):
 
 # Get all students with optional filters
 @app.get("/students", response_model=list[Student])
-async def get_all_students(country: str | None = Query(default=None, description="To apply filter of country. If not given or empty, this filter should be applied."),
-                           age: int | None = Query(default=None, gt=0, description="Only records which have age greater than equal to the provided age should be present in the result. If not given or empty, this filter should be applied.")):
+async def get_all_students(country: Optional[str] = Query(default=None, description="To apply filter of country. If not given or empty, this filter should be applied."),
+                           age: Optional[int] = Query(default=None, gt=0, description="Only records which have age greater than equal to the provided age should be present in the result. If not given or empty, this filter should be applied.")):
    
     # filter logic based on country and age
     filters = {}
