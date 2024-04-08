@@ -21,6 +21,6 @@ class ResponseModel(BaseModel):
     id: str
 
 class StudentUpdate(BaseModel):
-    name: str | None = None
+    name: str | None = None 
     age: int | None = None
     address: dict | None = None
