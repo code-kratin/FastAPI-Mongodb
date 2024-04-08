@@ -20,7 +20,3 @@ class Student(BaseModel):
 class ResponseModel(BaseModel):
     id: str
 
-class StudentUpdate(BaseModel):
-    name: str | None  
-    age: int | None 
-    address: dict | None 
