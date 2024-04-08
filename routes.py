@@ -60,27 +60,24 @@ async def get_student_by_id(student_id: str):
 # Update a student by ID (partial update with PATCH)
 
 @app.patch("/students/{student_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def update_student(student_id: str = Path(..., description="The ID of the student to update."),
-                          updated_data: StudentUpdate = Body(..., description="Student data to be updated")):  #Path(...) is used for path parameters that are part of the URL itself (eg, /students/{student_id}). In this case, the student ID is extracted from the URL path.Body(...) is used for data sent in the request body, as JSON. Here, the updated_data containing the student properties to be updated comes from the request body.
-    try:
-        # Find student by ID using ObjectId
-        student = students_collection.find_one({"_id": ObjectId(student_id)})
-        if student is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+async def update_student(student_id: str = Path(..., description="The ID of the student to be updated."),
+                         updated_data: Student = Body(..., description="Student data to be updated")):
+    # Filter for student by ID
+    student = students_collection.find_one({"_id": ObjectId(student_id)})
+    if student is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
 
-        # Prepare update data (only include provided fields)
-        update_dict = updated_data.dict(exclude_unset=True)
+    # Prepare update data (only update provided fields)
+    update_dict = updated_data.dict(exclude_unset=True)
 
-        # Update the student document
-        result = students_collection.update_one({"_id": ObjectId(student_id)}, {"$set": update_dict})
+    # Update the student document
+    result = students_collection.update_one({"_id": ObjectId(student_id)}, {"$set": update_dict})
 
-        if result.matched_count == 0:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
+    # Handle update result (optional: you can return the updated document here)
+    if result.matched_count == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
 
-        return None  # No content response (204)
-
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    return None  # No content response (204)
 
 
 # Delete a student by ID
