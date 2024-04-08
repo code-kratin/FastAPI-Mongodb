@@ -10,7 +10,7 @@
 #     return conn.local.user.find()
 # Create a new student
 from fastapi import FastAPI, Body, Path, Query, HTTPException, status
-from models import Student, ResponseModel, StudentUpdate
+from models import Student, ResponseModel
 from config import students_collection
 from bson.objectid import ObjectId   #In pymongo 2.2 the call to import objectid is changed
 
