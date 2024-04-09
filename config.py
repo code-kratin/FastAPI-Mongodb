@@ -4,8 +4,8 @@
 
 from pymongo import MongoClient
 
-MONGODB_URI = "mongodb://localhost:27017/"  # Update with your actual connection string
+MONGODB_URI = "mongodb://localhost:27017/"  
 
 client = MongoClient(MONGODB_URI)
-db = client["StudentsDatabase"]  # Replace with your database name
-students_collection = db["students"]  # Replace with your collection name
+db = client["StudentsDatabase"]  
+students_collection = db["students"]  
